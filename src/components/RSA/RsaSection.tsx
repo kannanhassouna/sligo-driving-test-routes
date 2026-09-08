@@ -7,15 +7,10 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-interface RsaSectionProps {
-  isLargeText?: boolean;
-}
-
-export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
+export const RsaSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<'all' | 'bonnet' | 'controls' | 'tires'>('all');
   const [revealedIds, setRevealedIds] = useState<Record<string, boolean>>({});
   
-  // Checklist state
   const [checklist, setChecklist] = useState<Record<string, boolean>>({
     insurance: true,
     tax: true,
@@ -38,8 +33,8 @@ export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
     const allChecked = Object.values(updated).every(Boolean);
     if (allChecked) {
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 60,
+        spread: 60,
         origin: { y: 0.6 }
       });
     }
@@ -47,15 +42,15 @@ export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
 
   const getQuestionIcon = (iconName: string) => {
     switch (iconName) {
-      case 'Droplet': return <Droplet className="w-5 h-5 text-amber-700" />;
-      case 'Thermometer': return <Thermometer className="w-5 h-5 text-red-700" />;
-      case 'ShieldAlert': return <ShieldAlert className="w-5 h-5 text-purple-700" />;
-      case 'Sparkles': return <Sparkles className="w-5 h-5 text-blue-700" />;
-      case 'Disc': return <Disc className="w-5 h-5 text-emerald-700" />;
-      case 'Gauge': return <Gauge className="w-5 h-5 text-cyan-700" />;
-      case 'Wind': return <Wind className="w-5 h-5 text-sky-700" />;
-      case 'CloudFog': return <CloudFog className="w-5 h-5 text-indigo-700" />;
-      default: return <HelpCircle className="w-5 h-5 text-slate-700" />;
+      case 'Droplet': return <Droplet className="w-4 h-4 text-amber-600" />;
+      case 'Thermometer': return <Thermometer className="w-4 h-4 text-rose-600" />;
+      case 'ShieldAlert': return <ShieldAlert className="w-4 h-4 text-purple-600" />;
+      case 'Sparkles': return <Sparkles className="w-4 h-4 text-blue-600" />;
+      case 'Disc': return <Disc className="w-4 h-4 text-emerald-600" />;
+      case 'Gauge': return <Gauge className="w-4 h-4 text-cyan-600" />;
+      case 'Wind': return <Wind className="w-4 h-4 text-sky-600" />;
+      case 'CloudFog': return <CloudFog className="w-4 h-4 text-indigo-600" />;
+      default: return <HelpCircle className="w-4 h-4 text-slate-500" />;
     }
   };
 
@@ -65,73 +60,68 @@ export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
   });
 
   const checklistItems = [
-    { id: 'insurance', label: 'Valid Motor Insurance disc clearly displayed on windscreen' },
-    { id: 'tax', label: 'Valid Motor Tax disc in date and visible' },
-    { id: 'nct', label: 'Valid NCT disc displayed (mandatory if car is 4+ years old)' },
-    { id: 'lplates', label: 'Red "L" plates fitted securely front & rear (at least 15cm high on white background)' },
-    { id: 'tires', label: 'All 4 tires have legal tread depth (at least 1.6mm) and no cuts or bulges' },
-    { id: 'lights', label: 'Brake lights, indicators, headlights, reverse light & number plate lights all working' },
-    { id: 'fluids', label: 'Engine oil, coolant, brake fluid and screenwash checked and topped up' },
-    { id: 'clean_mirrors', label: 'Windscreen clean inside and out; interior and exterior mirrors clean and adjusted' }
+    { id: 'insurance', label: 'Valid Motor Insurance disc on windscreen' },
+    { id: 'tax', label: 'Valid Motor Tax disc in date' },
+    { id: 'nct', label: 'Valid NCT disc displayed (if car is 4+ years old)' },
+    { id: 'lplates', label: 'Red "L" plates fitted securely front & rear' },
+    { id: 'tires', label: 'All 4 tires legal tread (>= 1.6mm) & good condition' },
+    { id: 'lights', label: 'Brake lights, indicators, headlights all working' },
+    { id: 'fluids', label: 'Engine oil, coolant, brake fluid & screenwash topped up' },
+    { id: 'clean_mirrors', label: 'Windscreen and mirrors clean and adjusted' }
   ];
 
   const readyCount = Object.values(checklist).filter(Boolean).length;
 
   return (
-    <section className="space-y-8">
-      {/* Intro Header */}
-      <div className="bg-white border-3 border-emerald-300 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <div className="flex items-center gap-2 text-emerald-800 text-sm font-black uppercase tracking-wider mb-2">
-          <BookOpen className="w-5 h-5 text-emerald-700" />
-          <span>Official RSA Driving Test Protocol</span>
+    <div className="space-y-6">
+      {/* Section Header */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="flex items-center gap-1.5 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">
+          <BookOpen className="w-4 h-4" />
+          <span>Official RSA Test Protocol</span>
         </div>
-        <h2 className={`font-black text-slate-900 tracking-tight leading-tight mb-2 ${isLargeText ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'}`}>
-          Car Checks & Questions Asked by the Examiner
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+          Vehicle Checklist & Technical Questions
         </h2>
-        <p className={`text-slate-700 leading-relaxed max-w-3xl ${isLargeText ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
-          Before you drive out onto the road in Sligo, the examiner will ask you to point out items under the bonnet and demonstrate controls inside the car. 
-          Use this checklist and simple questions below so you can answer with full confidence.
+        <p className="text-sm text-slate-600 mt-1 max-w-3xl">
+          Complete the morning checklist to ensure your car is test-ready, and review the technical questions asked before driving.
         </p>
       </div>
 
-      {/* Pre-Test Vehicle Readiness Checklist */}
-      <div className="bg-white border-3 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b-2 border-slate-200">
+      {/* Checklist Card */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
           <div>
-            <h3 className={`font-black text-slate-900 flex items-center gap-2.5 ${isLargeText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
-              <CheckSquare className="w-6 h-6 text-emerald-700" />
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <CheckSquare className="w-4 h-4 text-emerald-600" />
               Test Morning Car Checklist
             </h3>
-            <p className="text-sm sm:text-base font-medium text-slate-600 mt-1">
-              Tap each item to check it off. If your car fails any of these, the RSA examiner cannot take you out!
-            </p>
+            <p className="text-xs text-slate-500">Tap to check off each item before leaving for the Carraroe centre</p>
           </div>
-          <span className="text-base font-black px-4 py-2 rounded-xl bg-emerald-100 text-emerald-900 border-2 border-emerald-300 self-start">
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex-shrink-0">
             {readyCount} of {checklistItems.length} Ready
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {checklistItems.map((item) => {
             const isChecked = checklist[item.id];
             return (
               <button
                 key={item.id}
                 onClick={() => toggleCheck(item.id)}
-                className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition cursor-pointer ${
+                className={`flex items-center gap-2.5 p-3 rounded-xl border text-left text-xs sm:text-sm transition cursor-pointer ${
                   isChecked
-                    ? 'bg-emerald-50 border-emerald-400 text-emerald-950 font-bold'
-                    : 'bg-slate-50 border-slate-300 text-slate-700 hover:border-slate-400'
+                    ? 'bg-emerald-50/70 border-emerald-300 text-emerald-950 font-medium'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                 }`}
               >
                 {isChecked ? (
-                  <CheckSquare className="w-6 h-6 text-emerald-700 flex-shrink-0 mt-0.5" />
+                  <CheckSquare className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                 ) : (
-                  <Square className="w-6 h-6 text-slate-400 flex-shrink-0 mt-0.5" />
+                  <Square className="w-4 h-4 text-slate-400 flex-shrink-0" />
                 )}
-                <span className={`leading-relaxed ${isLargeText ? 'text-base sm:text-lg' : 'text-sm sm:text-base'}`}>
-                  {item.label}
-                </span>
+                <span className="truncate">{item.label}</span>
               </button>
             );
           })}
@@ -140,54 +130,51 @@ export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
 
       {/* Under The Bonnet & Technical Questions */}
       <div className="space-y-4">
-        <div className="bg-white border-3 border-slate-300 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className={`font-black text-slate-900 ${isLargeText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
-              Under the Bonnet & Cabin Questions
+            <h3 className="text-base font-bold text-slate-900">
+              Technical Questions & Answers
             </h3>
-            <p className="text-sm sm:text-base font-medium text-slate-600 mt-1">
-              Tap &ldquo;Show Answer&rdquo; to test your memory on what to say.
-            </p>
+            <p className="text-xs text-slate-500">Tap &ldquo;Show Answer&rdquo; to test your memory</p>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setActiveCategory('all')}
-              className={`px-4 py-2 rounded-xl text-sm sm:text-base font-bold border-2 transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 activeCategory === 'all'
-                  ? 'bg-emerald-700 text-white border-emerald-800 shadow'
-                  : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               All ({RSA_BONNET_QUESTIONS.length})
             </button>
             <button
               onClick={() => setActiveCategory('bonnet')}
-              className={`px-4 py-2 rounded-xl text-sm sm:text-base font-bold border-2 transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 activeCategory === 'bonnet'
-                  ? 'bg-emerald-700 text-white border-emerald-800 shadow'
-                  : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               Under Bonnet
             </button>
             <button
               onClick={() => setActiveCategory('tires')}
-              className={`px-4 py-2 rounded-xl text-sm sm:text-base font-bold border-2 transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 activeCategory === 'tires'
-                  ? 'bg-emerald-700 text-white border-emerald-800 shadow'
-                  : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               Tires
             </button>
             <button
               onClick={() => setActiveCategory('controls')}
-              className={`px-4 py-2 rounded-xl text-sm sm:text-base font-bold border-2 transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                 activeCategory === 'controls'
-                  ? 'bg-emerald-700 text-white border-emerald-800 shadow'
-                  : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               Cabin Controls
@@ -195,119 +182,108 @@ export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
           </div>
         </div>
 
-        {/* Questions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filteredQuestions.map((q) => {
             const isRevealed = revealedIds[q.id];
             return (
-              <article 
+              <div 
                 key={q.id}
-                className="bg-white border-3 border-slate-300 hover:border-emerald-600 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between transition"
+                className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs flex flex-col justify-between hover:border-slate-300 transition"
               >
                 <div>
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="p-2.5 rounded-xl bg-slate-100 border border-slate-300 flex-shrink-0">
+                  <div className="flex items-start gap-2.5 mb-2">
+                    <div className="p-2 rounded-lg bg-slate-100 border border-slate-200 flex-shrink-0">
                       {getQuestionIcon(q.iconName)}
                     </div>
                     <div>
-                      <span className="text-xs font-black uppercase text-slate-500 tracking-wider">
-                        {q.category} Question
+                      <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">
+                        {q.category}
                       </span>
-                      <h4 className={`font-black text-slate-900 leading-snug mt-0.5 ${isLargeText ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'}`}>
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
                         {q.question}
                       </h4>
                     </div>
                   </div>
 
-                  {isRevealed ? (
-                    <div className="mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 space-y-3 animate-fadeIn">
-                      <p className={`text-emerald-950 font-medium leading-relaxed ${isLargeText ? 'text-base sm:text-lg' : 'text-sm sm:text-base'}`}>
-                        {q.answer}
-                      </p>
-                      <div className="p-3 rounded-lg bg-white border border-emerald-300 text-emerald-900 font-bold text-sm">
-                        <span>💡 Examiner Tip: </span>{q.tip}
+                  {isRevealed && (
+                    <div className="mt-3 p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-950 space-y-2 animate-fadeIn">
+                      <p className="leading-relaxed">{q.answer}</p>
+                      <div className="text-[11px] text-emerald-800 font-medium">
+                        <strong>💡 Tip: </strong>{q.tip}
                       </div>
                     </div>
-                  ) : (
-                    <p className="text-slate-500 italic mt-3 text-sm">
-                      Tap &ldquo;Show Answer&rdquo; below to see what the examiner wants you to say.
-                    </p>
                   )}
                 </div>
 
-                <div className="mt-6 pt-4 border-t-2 border-slate-200 flex justify-end">
+                <div className="mt-3 pt-2 border-t border-slate-100 flex justify-end">
                   <button
                     onClick={() => toggleReveal(q.id)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm sm:text-base font-bold bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
                   >
-                    {isRevealed ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5 text-emerald-700" />}
-                    <span>{isRevealed ? 'Hide Answer' : 'Show Answer'}</span>
+                    {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
+                    <span>{isRevealed ? 'Hide' : 'Show Answer'}</span>
                   </button>
                 </div>
-              </article>
+              </div>
             );
           })}
         </div>
       </div>
 
-      {/* RSA Marking Sheet Breakdown (Grade 1, 2, 3) */}
-      <div className="bg-white border-3 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div>
-          <div className="flex items-center gap-2 text-rose-700 text-sm font-black uppercase tracking-wider mb-2">
-            <AlertOctagon className="w-5 h-5 text-rose-600" />
-            <span>Marking Scheme Explained</span>
-          </div>
-          <h3 className={`font-black text-slate-900 leading-tight mb-2 ${isLargeText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
-            How the Examiner Marks You (Grade 1, Grade 2, Grade 3)
-          </h3>
-          <p className={`text-slate-700 leading-relaxed max-w-3xl ${isLargeText ? 'text-lg' : 'text-base'}`}>
-            Understanding how marks are given takes away fear. You do not need a perfect score to pass! Here is what each mark means:
-          </p>
+      {/* Marking Guide */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="flex items-center gap-1.5 text-rose-600 text-xs font-bold uppercase tracking-wider mb-1">
+          <AlertOctagon className="w-4 h-4" />
+          <span>Marking Scheme</span>
         </div>
+        <h3 className="text-base font-bold text-slate-900 mb-1">
+          How Faults are Graded
+        </h3>
+        <p className="text-xs text-slate-500 mb-4">
+          The test allows room for minor mistakes—here is what each fault category means:
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {RSA_MARKING_GUIDE.map((m) => {
             const isRed = m.grade === 'Grade 3';
             const isAmber = m.grade === 'Grade 2';
             return (
               <div 
                 key={m.grade}
-                className={`p-6 rounded-2xl border-3 flex flex-col justify-between ${
+                className={`p-4 rounded-xl border text-xs flex flex-col justify-between ${
                   isRed 
-                    ? 'bg-red-50 border-red-300 text-red-950' 
+                    ? 'bg-rose-50/50 border-rose-200' 
                     : isAmber 
-                    ? 'bg-amber-50 border-amber-300 text-amber-950'
-                    : 'bg-emerald-50 border-emerald-300 text-emerald-950'
+                    ? 'bg-amber-50/50 border-amber-200' 
+                    : 'bg-emerald-50/50 border-emerald-200'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className={`px-3 py-1 rounded-lg text-sm font-black text-white ${
-                      isRed ? 'bg-red-700' : isAmber ? 'bg-amber-700' : 'bg-emerald-700'
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`px-2 py-0.5 rounded text-[11px] font-bold text-white ${
+                      isRed ? 'bg-rose-600' : isAmber ? 'bg-amber-600' : 'bg-emerald-600'
                     }`}>
                       {m.grade}
                     </span>
-                    <span className="font-bold text-sm sm:text-base">{m.title}</span>
+                    <span className="font-bold text-slate-800">{m.title}</span>
                   </div>
 
-                  <p className="text-sm sm:text-base font-medium leading-relaxed mb-4">
+                  <p className="text-slate-600 leading-relaxed mb-3">
                     {m.definition}
                   </p>
 
-                  <div className="p-3.5 rounded-xl bg-white border-2 border-slate-200 mb-4 text-sm sm:text-base">
-                    <strong className="block text-slate-900 mb-1">Pass / Fail Rule:</strong>
-                    <span className={isRed ? 'text-red-700 font-bold' : 'text-slate-800 font-semibold'}>
-                      {m.consequence}
-                    </span>
+                  <div className="p-2 rounded bg-white border border-slate-200 mb-3 text-[11px]">
+                    <strong className="text-slate-800">Rule: </strong>
+                    <span className={isRed ? 'text-rose-700 font-semibold' : 'text-slate-700'}>{m.consequence}</span>
                   </div>
 
                   <div>
-                    <span className="text-xs font-black uppercase text-slate-600 tracking-wider block mb-2">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">
                       Examples:
                     </span>
-                    <ul className="space-y-1.5 text-sm list-disc list-inside">
+                    <ul className="space-y-0.5 text-slate-600 list-disc list-inside">
                       {m.examples.map((ex, i) => (
-                        <li key={i} className="font-medium">{ex}</li>
+                        <li key={i}>{ex}</li>
                       ))}
                     </ul>
                   </div>
@@ -317,6 +293,6 @@ export const RsaSection: React.FC<RsaSectionProps> = ({ isLargeText }) => {
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 };

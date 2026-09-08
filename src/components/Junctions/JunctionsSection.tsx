@@ -1,68 +1,60 @@
 import React from 'react';
 import { SLIGO_TRICKY_JUNCTIONS } from '../../data/sligoRoutes';
-import { 
-  AlertTriangle, Navigation, MapPin, 
-  ArrowRightCircle, ShieldAlert 
-} from 'lucide-react';
+import { AlertTriangle, Navigation, MapPin, ArrowRightCircle, ShieldAlert } from 'lucide-react';
 
-interface JunctionsSectionProps {
-  isLargeText?: boolean;
-}
-
-export const JunctionsSection: React.FC<JunctionsSectionProps> = ({ isLargeText }) => {
+export const JunctionsSection: React.FC = () => {
   return (
-    <section className="space-y-6">
-      {/* Intro header */}
-      <div className="bg-white border-3 border-amber-300 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <div className="flex items-center gap-2 text-amber-800 text-sm font-black uppercase tracking-wider mb-2">
-          <AlertTriangle className="w-5 h-5 text-amber-600" />
-          <span>Sligo Road Hazards & Complex Junctions</span>
+    <div className="space-y-5">
+      {/* Intro Header */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="flex items-center gap-1.5 text-amber-600 text-xs font-bold uppercase tracking-wider mb-1">
+          <AlertTriangle className="w-4 h-4" />
+          <span>Lane Choice & Roundabout Navigation</span>
         </div>
-        <h2 className={`font-black text-slate-900 tracking-tight leading-tight mb-2 ${isLargeText ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'}`}>
-          Sligo Roundabouts & Tricky Junctions
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+          Sligo Roundabouts & Complex Junctions
         </h2>
-        <p className={`text-slate-700 leading-relaxed max-w-3xl ${isLargeText ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
-          Sligo has multiple busy multi-lane roundabouts, fast N4 dual carriageway slip roads, and tight blind junctions. 
-          Knowing which lane to pick before you enter makes the driving test much easier and prevents sudden lane-change faults.
+        <p className="text-sm text-slate-600 mt-1 max-w-3xl">
+          Quick lane rules for Sligo’s busiest roundabouts and N4 slip roads to prevent hesitation and late lane changes on your test.
         </p>
       </div>
 
       {/* Junction Cards */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         {SLIGO_TRICKY_JUNCTIONS.map((j) => (
-          <article 
+          <div 
             key={j.id}
-            className="bg-white border-3 border-slate-300 hover:border-amber-500 rounded-2xl p-6 sm:p-8 shadow-sm transition"
+            className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs hover:border-amber-400 transition-all"
           >
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
               <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className={`px-3 py-1 rounded-lg text-sm font-black uppercase tracking-wide border ${
+                <div className="flex items-center gap-2 mb-1">
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase ${
                     j.difficulty === 'Critical'
-                      ? 'bg-red-100 text-red-800 border-red-300'
-                      : 'bg-amber-100 text-amber-900 border-amber-300'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-amber-50 text-amber-700 border border-amber-200'
                   }`}>
                     {j.difficulty} Risk
                   </span>
-                  <span className="text-sm font-bold text-slate-600 flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-amber-600" />
+                  <span className="text-xs text-slate-500 flex items-center gap-1 font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-amber-600" />
                     {j.locationName}
                   </span>
                 </div>
-                <h3 className={`font-black text-slate-900 tracking-tight leading-snug ${isLargeText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                   {j.name}
                 </h3>
               </div>
 
               {/* Navigation CTAs */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+              <div className="flex items-center gap-2 self-start sm:self-auto">
                 <a
                   href={j.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-green-700 hover:bg-green-800 text-white text-sm sm:text-base font-bold shadow transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition"
                 >
-                  <Navigation className="w-4 h-4" />
+                  <Navigation className="w-3.5 h-3.5" />
                   Google Maps
                 </a>
 
@@ -70,46 +62,45 @@ export const JunctionsSection: React.FC<JunctionsSectionProps> = ({ isLargeText 
                   href={j.appleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm sm:text-base font-bold transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition"
                 >
-                  <Navigation className="w-4 h-4 text-emerald-400" />
+                  <Navigation className="w-3.5 h-3.5 text-emerald-400" />
                   Apple Maps
                 </a>
               </div>
             </div>
 
-            {/* Plain explanation */}
-            <p className={`text-slate-800 leading-relaxed mb-4 ${isLargeText ? 'text-lg' : 'text-base'}`}>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
               {j.summary}
             </p>
 
-            {/* Recommended Lane Guidance */}
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 sm:p-5 mb-4">
-              <div className="flex items-center gap-2 text-blue-900 font-black text-sm sm:text-base mb-1.5">
-                <ArrowRightCircle className="w-5 h-5 text-blue-700" />
-                Correct Lane & Indicator Rules:
+            {/* Lane Guidance */}
+            <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-3 mb-2.5">
+              <div className="flex items-center gap-1.5 text-blue-900 font-bold text-xs mb-0.5">
+                <ArrowRightCircle className="w-4 h-4 text-blue-600" />
+                Correct Lane & Indicator:
               </div>
-              <p className={`text-blue-950 font-bold leading-relaxed ${isLargeText ? 'text-base sm:text-lg' : 'text-sm sm:text-base'}`}>
+              <p className="text-xs sm:text-sm text-blue-950 font-medium leading-relaxed">
                 {j.recommendedLane}
               </p>
             </div>
 
             {/* Examiner Watchpoints */}
-            <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 sm:p-5">
-              <div className="flex items-center gap-2 text-amber-900 font-black text-sm sm:text-base mb-2">
-                <ShieldAlert className="w-5 h-5 text-amber-700" />
-                What examiners watch for (Avoid test marks):
+            <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3">
+              <div className="flex items-center gap-1.5 text-amber-900 font-bold text-xs mb-1">
+                <ShieldAlert className="w-4 h-4 text-amber-600" />
+                What the examiner watches for:
               </div>
-              <ul className={`space-y-1.5 text-amber-950 list-disc list-inside ${isLargeText ? 'text-base' : 'text-sm sm:text-base'}`}>
+              <ul className="space-y-0.5 text-xs text-amber-950 list-disc list-inside">
                 {j.examinerWatchpoints.map((pt, idx) => (
                   <li key={idx} className="font-medium">{pt}</li>
                 ))}
               </ul>
             </div>
 
-          </article>
+          </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
