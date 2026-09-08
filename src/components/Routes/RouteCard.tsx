@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import type { TestRoute } from '../../types/route';
-import { Navigation, Clock, Route as RouteIcon, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Lightbulb } from 'lucide-react';
+import { Navigation, Clock, Route as RouteIcon, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Lightbulb, BookOpen } from 'lucide-react';
 
 interface RouteCardProps {
   route: TestRoute;
+  onViewGuide: (route: TestRoute) => void;
 }
 
-export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
+export const RouteCard: React.FC<RouteCardProps> = ({ route, onViewGuide }) => {
   const [showSteps, setShowSteps] = useState(false);
 
   return (
@@ -38,7 +39,10 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
         </div>
 
         {/* Route Title */}
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-snug">
+        <h2 
+          onClick={() => onViewGuide(route)}
+          className="text-lg font-bold text-slate-900 tracking-tight leading-snug hover:text-blue-600 transition cursor-pointer"
+        >
           {route.title}
         </h2>
 
@@ -70,7 +74,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
           <div className="mb-4 p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-xs">
             <div className="flex items-center gap-1.5 font-bold text-amber-900 mb-1.5">
               <Lightbulb className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-              <span>Route Tips:</span>
+              <span>Key Route Tips:</span>
             </div>
             <ul className="space-y-1 text-amber-950 list-disc list-inside">
               {route.examinerWarnings.map((tip, idx) => (
@@ -83,17 +87,25 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
 
       {/* Action Row */}
       <div className="pt-3 border-t border-slate-100 space-y-2">
-        {/* Navigation Button */}
-        <div>
+        {/* Navigation & Guide Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <a
             href={route.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition"
+            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition"
           >
             <Navigation className="w-4 h-4" />
-            <span>Open in Google Maps</span>
+            <span>Google Maps</span>
           </a>
+
+          <button
+            onClick={() => onViewGuide(route)}
+            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition cursor-pointer"
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Full Route Guide →</span>
+          </button>
         </div>
 
         {/* Steps Toggle */}
@@ -102,7 +114,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
             onClick={() => setShowSteps(!showSteps)}
             className="w-full flex items-center justify-center gap-1 py-1.5 text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition cursor-pointer"
           >
-            <span>{showSteps ? 'Hide turn-by-turn steps' : `View ${route.turnByTurn.length} turn-by-turn steps`}</span>
+            <span>{showSteps ? 'Hide turn-by-turn steps' : `Quick view ${route.turnByTurn.length} steps`}</span>
             {showSteps ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
         </div>

@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SLIGO_TEST_ROUTES, SLIGO_TEST_CENTRE } from './data/sligoRoutes';
+import type { TestRoute } from './types/route';
 import { Navbar } from './components/Common/Navbar';
 import { RouteCard } from './components/Routes/RouteCard';
+import { RouteDetailPage } from './components/Routes/RouteDetailPage';
 import { ManeuverSection } from './components/Maneuvers/ManeuverSection';
 import { JunctionsSection } from './components/Junctions/JunctionsSection';
 import { RsaSection } from './components/RSA/RsaSection';
@@ -11,6 +13,50 @@ export function App() {
   const [activeTab, setActiveTab] = useState<'routes' | 'maneuvers' | 'junctions' | 'prep'>('routes');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedManeuverFilter, setSelectedManeuverFilter] = useState<string>('all');
+  const [selectedRoute, setSelectedRoute] = useState<TestRoute | null>(null);
+
+  // Sync route selection with URL hash (#route-1, #route-2, etc.)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      const match = hash.match(/^#route-([1-6])$/);
+      if (match) {
+        const routeNum = parseInt(match[1], 10);
+        const found = SLIGO_TEST_ROUTES.find(r => r.routeNumber === routeNum);
+        if (found) {
+          setSelectedRoute(found);
+          setActiveTab('routes');
+          return;
+        }
+      }
+      if (!hash || hash === '#routes') {
+        setSelectedRoute(null);
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleSelectRoute = (route: TestRoute) => {
+    setSelectedRoute(route);
+    setActiveTab('routes');
+    window.location.hash = `#route-${route.routeNumber}`;
+  };
+
+  const handleBackToRoutes = () => {
+    setSelectedRoute(null);
+    window.location.hash = '';
+  };
+
+  const handleTabChange = (tab: 'routes' | 'maneuvers' | 'junctions' | 'prep') => {
+    setActiveTab(tab);
+    if (tab !== 'routes') {
+      setSelectedRoute(null);
+      window.location.hash = '';
+    }
+  };
 
   // Filter routes based on search and maneuver filter
   const filteredRoutes = SLIGO_TEST_ROUTES.filter((route) => {
@@ -31,7 +77,7 @@ export function App() {
       {/* Sleek Top Navigation */}
       <Navbar 
         activeTab={activeTab} 
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
       />
 
       {/* Clean Starting Hub Notice */}
@@ -64,89 +110,99 @@ export function App() {
         
         {/* Tab 1: Test Routes */}
         {activeTab === 'routes' && (
-          <div className="space-y-4">
-            
-            {/* Search & Maneuver Filter Bar */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
-              {/* Search Bar */}
-              <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search areas (Caltragh, Cleveragh, Gallows Hill, Crozon)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-medium"
-                />
-              </div>
-
-              {/* Filter Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-                <button
-                  onClick={() => setSelectedManeuverFilter('all')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
-                    selectedManeuverFilter === 'all'
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  All Routes ({SLIGO_TEST_ROUTES.length})
-                </button>
-                <button
-                  onClick={() => setSelectedManeuverFilter('Reverse')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
-                    selectedManeuverFilter === 'Reverse'
-                      ? 'bg-purple-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  Reverse Corner
-                </button>
-                <button
-                  onClick={() => setSelectedManeuverFilter('Hill Start')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
-                    selectedManeuverFilter === 'Hill Start'
-                      ? 'bg-amber-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  Hill Start
-                </button>
-                <button
-                  onClick={() => setSelectedManeuverFilter('Turnabout')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
-                    selectedManeuverFilter === 'Turnabout'
-                      ? 'bg-emerald-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  Turnabout
-                </button>
-              </div>
-            </div>
-
-            {/* Routes Grid */}
-            {filteredRoutes.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
-                <p className="text-slate-500 text-sm">No driving routes match your search.</p>
-                <button 
-                  onClick={() => { setSearchQuery(''); setSelectedManeuverFilter('all'); }}
-                  className="mt-3 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition"
-                >
-                  Reset Search
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredRoutes.map((route) => (
-                  <RouteCard
-                    key={route.id}
-                    route={route}
+          selectedRoute ? (
+            /* Dedicated Route Page with Full Tips & Guide */
+            <RouteDetailPage
+              route={selectedRoute}
+              onBack={handleBackToRoutes}
+              onSelectRoute={handleSelectRoute}
+            />
+          ) : (
+            /* Routes Overview List */
+            <div className="space-y-4">
+              {/* Search & Maneuver Filter Bar */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-xs">
+                {/* Search Bar */}
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search areas (Caltragh, Cleveragh, Gallows Hill, Crozon)..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-medium"
                   />
-                ))}
+                </div>
+
+                {/* Filter Pills */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+                  <button
+                    onClick={() => setSelectedManeuverFilter('all')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                      selectedManeuverFilter === 'all'
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    All Routes ({SLIGO_TEST_ROUTES.length})
+                  </button>
+                  <button
+                    onClick={() => setSelectedManeuverFilter('Reverse')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                      selectedManeuverFilter === 'Reverse'
+                        ? 'bg-purple-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Reverse Corner
+                  </button>
+                  <button
+                    onClick={() => setSelectedManeuverFilter('Hill Start')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                      selectedManeuverFilter === 'Hill Start'
+                        ? 'bg-amber-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Hill Start
+                  </button>
+                  <button
+                    onClick={() => setSelectedManeuverFilter('Turnabout')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                      selectedManeuverFilter === 'Turnabout'
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Turnabout
+                  </button>
+                </div>
               </div>
-            )}
-          </div>
+
+              {/* Routes Grid */}
+              {filteredRoutes.length === 0 ? (
+                <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
+                  <p className="text-slate-500 text-sm">No driving routes match your search.</p>
+                  <button 
+                    onClick={() => { setSearchQuery(''); setSelectedManeuverFilter('all'); }}
+                    className="mt-3 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition"
+                  >
+                    Reset Search
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredRoutes.map((route) => (
+                    <RouteCard
+                      key={route.id}
+                      route={route}
+                      onViewGuide={handleSelectRoute}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )
         )}
 
         {/* Tab 2: Sligo Maneuver Hotspots */}
