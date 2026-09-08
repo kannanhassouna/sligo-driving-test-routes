@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { TestRoute } from '../../types/route';
-import { Navigation, Clock, Route as RouteIcon, ChevronDown, ChevronUp, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Navigation, Clock, Route as RouteIcon, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Lightbulb } from 'lucide-react';
 
 interface RouteCardProps {
   route: TestRoute;
@@ -61,9 +61,24 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
         </div>
 
         {/* Overview sentence */}
-        <p className="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-4">
+        <p className="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-3">
           {route.overview}
         </p>
+
+        {/* Route Tips */}
+        {route.examinerWarnings && route.examinerWarnings.length > 0 && (
+          <div className="mb-4 p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-xs">
+            <div className="flex items-center gap-1.5 font-bold text-amber-900 mb-1.5">
+              <Lightbulb className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+              <span>Route Tips:</span>
+            </div>
+            <ul className="space-y-1 text-amber-950 list-disc list-inside">
+              {route.examinerWarnings.map((tip, idx) => (
+                <li key={idx} className="leading-snug">{tip}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {/* Action Row */}

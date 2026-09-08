@@ -198,9 +198,9 @@ export const SLIGO_TEST_ROUTES: TestRoute[] = [
       }
     ],
     examinerWarnings: [
-      "Caltragh 30 km/h zone is the #1 failure point on this route - drivers often coast at 40 km/h.",
-      "Check blind spots continuously while reversing in Caltragh Crescent - examiners mark Grade 2 for looking only in mirrors.",
-      "Ensure clean lane positioning through the Carraroe Roundabout both outbound and inbound."
+      "Speed Trap: Caltragh residential area is strictly 30 km/h — brake early and don't coast at 40 km/h.",
+      "Reverse Corner: In Caltragh Crescent, look over your left shoulder out the back window throughout; don't rely only on mirrors.",
+      "Roundabout Lane: Use the left lane for the 1st/2nd exits at Carraroe roundabout and indicate off cleanly."
     ],
     googleMapsUrl: buildGoogleMapsRouteUrl(baseCentreWaypoint, route1Waypoints.slice(1, -1), baseCentreWaypoint),
     appleMapsUrl: buildAppleMapsRouteUrl(baseCentreWaypoint, route1Waypoints.slice(1, -1), baseCentreWaypoint)
@@ -290,9 +290,9 @@ export const SLIGO_TEST_ROUTES: TestRoute[] = [
       }
     ],
     examinerWarnings: [
-      "Turning right into Cemetery Road requires precise judgment of oncoming speeds on Pearse Road.",
-      "Cranmore estate has cars parked on both sides of the street - maintain 1 door clearance and yield to oncoming vehicles.",
-      "Ensure handbrake is applied if stopped on the slight grade during turnabout."
+      "Cemetery Road Turn: Watch oncoming speed on Pearse Road — wait patiently in position rather than cutting across.",
+      "Cranmore Estates: Parked cars on both sides require 1-door clearance; yield if an oncoming car has right-of-way.",
+      "Turnabout (3-Point Turn): Apply the handbrake every time you stop to change gear to avoid any rollback."
     ],
     googleMapsUrl: buildGoogleMapsRouteUrl(baseCentreWaypoint, route2Waypoints.slice(1, -1), baseCentreWaypoint),
     appleMapsUrl: buildAppleMapsRouteUrl(baseCentreWaypoint, route2Waypoints.slice(1, -1), baseCentreWaypoint)
@@ -373,9 +373,9 @@ export const SLIGO_TEST_ROUTES: TestRoute[] = [
       }
     ],
     examinerWarnings: [
-      "Crozon Downs has a sharp curb radius. Turning too early can result in mounting the curb (Grade 3 fail).",
-      "Look back through rear window while reversing, NOT just relying on mirrors.",
-      "Watch for children, dogs, and pedestrians in Crozon estate."
+      "Sharp Kerb: Crozon Downs has a sharp bend — turn slowly so you don't clip or mount the kerb (instant test fail).",
+      "Observations: Turn your head 360° before starting the reverse and pause if any pedestrian or car appears.",
+      "Estate Speed: Stay below 30 km/h in Crozon Park and anticipate children playing or delivery vehicles."
     ],
     googleMapsUrl: buildGoogleMapsRouteUrl(baseCentreWaypoint, route3Waypoints.slice(1, -1), baseCentreWaypoint),
     appleMapsUrl: buildAppleMapsRouteUrl(baseCentreWaypoint, route3Waypoints.slice(1, -1), baseCentreWaypoint)
@@ -466,9 +466,9 @@ export const SLIGO_TEST_ROUTES: TestRoute[] = [
       }
     ],
     examinerWarnings: [
-      "The Pound Street / Gallows Hill incline causes many roll-back faults. Practice handbrake balance repeatedly.",
-      "Must come to a complete standstill at the Stop sign on Pound Street, not a rolling yield.",
-      "N4 merge requires bold acceleration; hesitating on the slip road causes Grade 2/3 progress faults."
+      "Steep Hill Start: Pound Street / Gallows Hill has a steep incline — find the bite point and hold the handbrake firmly to prevent roll-back.",
+      "Complete Stop: You must come to a dead standstill behind the Pound Street STOP line before creeping forward.",
+      "N4 Dual Carriageway Merge: Accelerate boldly on the slip road to match 100 km/h traffic speed; hesitating causes progress faults."
     ],
     googleMapsUrl: buildGoogleMapsRouteUrl(baseCentreWaypoint, route4Waypoints.slice(1, -1), baseCentreWaypoint),
     appleMapsUrl: buildAppleMapsRouteUrl(baseCentreWaypoint, route4Waypoints.slice(1, -1), baseCentreWaypoint)
@@ -554,9 +554,9 @@ export const SLIGO_TEST_ROUTES: TestRoute[] = [
       }
     ],
     examinerWarnings: [
-      "Transition from 100 km/h on N4 to 50 km/h and 30 km/h requires firm progressive braking.",
-      "Oakfield has several blind driveways and delivery vans.",
-      "Ballydoogan has wider kerbs; keep parallel within 0.5 meters without hitting or scuffing the kerb."
+      "Dual Carriageway Deceleration: When exiting the N4, brake progressively before the slip curve down to 50 km/h.",
+      "Concealed Driveways: Oakfield has blind driveways — keep speeds modest (30–40 km/h) and cover the brake.",
+      "Ballydoogan Kerb Alignment: Finish the reverse parallel within 0.5m of the kerb without touching or scrubbing the tyre."
     ],
     googleMapsUrl: buildGoogleMapsRouteUrl(baseCentreWaypoint, route5Waypoints.slice(1, -1), baseCentreWaypoint),
     appleMapsUrl: buildAppleMapsRouteUrl(baseCentreWaypoint, route5Waypoints.slice(1, -1), baseCentreWaypoint)
@@ -643,9 +643,9 @@ export const SLIGO_TEST_ROUTES: TestRoute[] = [
       }
     ],
     examinerWarnings: [
-      "Doorly Park attracts many runners, cyclists, and families. Keep speed under 30 km/h and be prepared to stop.",
-      "Check for pedestrians at zebra crossings along Connaughton Road before accelerating.",
-      "Lane discipline on Pearse Road lights is heavily scrutinized."
+      "Pedestrian Heavy: Doorly Park is a shared recreation zone — stay under 30 km/h and give right of way to walkers.",
+      "Zebra Crossings: Check Connaughton Road crossings carefully — stopping late or accelerating across pedestrians is a Grade 3 fail.",
+      "Traffic Light Lanes: On Pearse Road, observe road arrows early to ensure you don't change lanes late at the lights."
     ],
     googleMapsUrl: buildGoogleMapsRouteUrl(baseCentreWaypoint, route6Waypoints.slice(1, -1), baseCentreWaypoint),
     appleMapsUrl: buildAppleMapsRouteUrl(baseCentreWaypoint, route6Waypoints.slice(1, -1), baseCentreWaypoint)
