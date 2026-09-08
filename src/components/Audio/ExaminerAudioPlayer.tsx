@@ -3,14 +3,15 @@ import { SLIGO_TEST_ROUTES } from '../../data/sligoRoutes';
 import type { TestRoute, TurnInstruction } from '../../types/route';
 import { 
   Volume2, Play, Pause, SkipForward, SkipBack, 
-  RotateCcw, Navigation, ExternalLink 
+  RotateCcw, Navigation, AlertCircle, CheckCircle2 
 } from 'lucide-react';
 
 interface ExaminerAudioPlayerProps {
   initialRoute?: TestRoute;
+  isLargeText?: boolean;
 }
 
-export const ExaminerAudioPlayer: React.FC<ExaminerAudioPlayerProps> = ({ initialRoute }) => {
+export const ExaminerAudioPlayer: React.FC<ExaminerAudioPlayerProps> = ({ initialRoute, isLargeText }) => {
   const [selectedRoute, setSelectedRoute] = useState<TestRoute>(initialRoute || SLIGO_TEST_ROUTES[0]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -39,12 +40,11 @@ export const ExaminerAudioPlayer: React.FC<ExaminerAudioPlayerProps> = ({ initia
   const speakText = (text: string) => {
     if (!('speechSynthesis' in window)) return;
     
-    window.speechSynthesis.cancel(); // Stop current speech
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = speechRate;
     utterance.pitch = 1.0;
     
-    // Try to pick an English / Irish accent voice if available
     const voices = window.speechSynthesis.getVoices();
     const irishVoice = voices.find(v => v.lang === 'en-IE') || voices.find(v => v.lang.startsWith('en-GB')) || voices[0];
     if (irishVoice) {
@@ -119,197 +119,191 @@ export const ExaminerAudioPlayer: React.FC<ExaminerAudioPlayerProps> = ({ initia
   return (
     <section className="space-y-6">
       {/* Intro Header */}
-      <div className="bg-gradient-to-r from-pink-950/60 via-slate-900 to-slate-900 border border-pink-500/30 rounded-2xl p-6 shadow-xl">
-        <div className="flex items-center gap-2 text-pink-400 text-xs font-bold uppercase tracking-wider mb-1">
-          <Volume2 className="w-4 h-4" />
-          Virtual Passenger Seat Simulation
+      <div className="bg-white border-3 border-rose-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <div className="flex items-center gap-2 text-rose-800 text-sm font-black uppercase tracking-wider mb-2">
+          <Volume2 className="w-5 h-5 text-rose-600" />
+          <span>Examiner Voice Simulator</span>
         </div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">
-          Virtual RSA Examiner Audio Simulator
+        <h2 className={`font-black text-slate-900 tracking-tight leading-tight mb-2 ${isLargeText ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'}`}>
+          Listen to the Examiner&rsquo;s Driving Instructions
         </h2>
-        <p className="text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
-          Simulate how an RSA examiner delivers verbal instructions in the car. 
-          Put on your earphones, sit in your car, or walk the route while the examiner reads out turns, maneuvers, and speed alerts!
+        <p className={`text-slate-700 leading-relaxed max-w-3xl ${isLargeText ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
+          Hear how the driving examiner speaks instructions during the test. 
+          You can practice sitting in your car or at home listening to the turns and speed limits step by step.
         </p>
       </div>
 
       {!isSpeechSupported && (
-        <div className="bg-amber-950/40 border border-amber-500/40 rounded-xl p-4 text-xs sm:text-sm text-amber-200">
-          Note: Your browser does not support the Web Speech API speech synthesis. The text prompts can still be read and stepped through manually.
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 text-base font-bold text-amber-900">
+          Note: Your browser does not have speech sound built-in, but you can still read through the step instructions below!
         </div>
       )}
 
       {/* Main Audio Player Card */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-6">
-        {/* Route Selector Selector Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-800">
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">
-              Select Driving Test Route
+      <div className="bg-white border-3 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+        
+        {/* Route Selector Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b-2 border-slate-200">
+          <div className="flex-1">
+            <label className="text-sm font-black uppercase tracking-wider text-slate-700 block mb-2">
+              Choose a Driving Test Route:
             </label>
             <select
               value={selectedRoute.id}
               onChange={(e) => handleRouteChange(e.target.value)}
-              className="bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2 text-sm font-semibold focus:outline-none focus:border-pink-500 transition"
+              className="w-full md:w-auto bg-slate-50 border-2 border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-base sm:text-lg font-bold focus:outline-none focus:border-blue-600 cursor-pointer"
             >
               {SLIGO_TEST_ROUTES.map((r) => (
                 <option key={r.id} value={r.id}>
-                  Route {r.routeNumber}: {r.title} ({r.distanceKm}km)
+                  Route {r.routeNumber}: {r.title} ({r.distanceKm} km)
                 </option>
               ))}
             </select>
           </div>
 
-          <div className="flex items-center gap-3">
-            <a
-              href={selectedRoute.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition"
-            >
-              <Navigation className="w-3.5 h-3.5" />
-              Open Route in Google Maps
-              <ExternalLink className="w-3 h-3 text-blue-200" />
-            </a>
-          </div>
+          <a
+            href={selectedRoute.googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-green-700 hover:bg-green-800 text-white text-base font-bold shadow transition text-center"
+          >
+            <Navigation className="w-5 h-5" />
+            <span>Open in Google Maps</span>
+          </a>
         </div>
 
         {/* Current Instruction Box */}
-        <div className="bg-slate-950/80 border border-pink-500/20 rounded-2xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-pink-500 to-purple-500" 
-            style={{ width: `${((currentStepIndex + 1) / selectedRoute.turnByTurn.length) * 100}%` }}
-          />
-
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/40 text-xs font-black flex items-center justify-center">
+        <div className="bg-slate-50 border-3 border-rose-300 rounded-2xl p-6 sm:p-8 relative">
+          
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <div className="flex items-center gap-2.5">
+              <span className="w-9 h-9 rounded-full bg-rose-700 text-white font-black text-base flex items-center justify-center">
                 {currentInstruction.step}
               </span>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <span className="text-base font-black text-slate-700 uppercase tracking-wider">
                 Step {currentStepIndex + 1} of {selectedRoute.turnByTurn.length}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-800 text-slate-200 border border-slate-700">
-                {currentInstruction.speedLimit} km/h
-              </span>
-            </div>
+            <span className="px-3 py-1 rounded-lg text-sm sm:text-base font-black bg-white text-slate-900 border-2 border-slate-300">
+              {currentInstruction.speedLimit} km/h Zone
+            </span>
           </div>
 
+          {/* Big spoken instruction */}
           <div className="space-y-3">
-            <div className="text-xs font-medium text-pink-400 flex items-center gap-1.5">
-              <Volume2 className="w-4 h-4 animate-pulse" />
-              Examiner instruction spoken aloud:
+            <div className="text-sm font-bold text-rose-800 flex items-center gap-2">
+              <Volume2 className="w-5 h-5 text-rose-600" />
+              <span>The examiner says:</span>
             </div>
-            <p className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+            <p className={`font-black text-slate-900 tracking-tight leading-snug ${isLargeText ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-xl sm:text-2xl lg:text-3xl'}`}>
               &ldquo;{currentInstruction.spokenAudioText}&rdquo;
             </p>
-            <p className="text-xs text-slate-400">
-              Location: <span className="text-slate-200 font-semibold">{currentInstruction.streetName}</span>
+            <p className="text-base font-bold text-slate-600">
+              Location: <span className="text-slate-900">{currentInstruction.streetName}</span>
             </p>
           </div>
 
+          {/* Help details */}
           {currentInstruction.laneGuidance && (
-            <div className="mt-4 text-xs text-blue-300 bg-blue-950/40 border border-blue-800/50 rounded-lg p-2.5">
-              <strong>Lane note: </strong>{currentInstruction.laneGuidance}
+            <div className="mt-4 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-950 text-base font-semibold flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-blue-700 flex-shrink-0" />
+              <span><strong>Lane guidance: </strong>{currentInstruction.laneGuidance}</span>
             </div>
           )}
 
           {currentInstruction.maneuverNotice && (
-            <div className="mt-2 text-xs text-purple-300 bg-purple-950/40 border border-purple-800/50 rounded-lg p-2.5">
-              <strong>Maneuver: </strong>{currentInstruction.maneuverNotice}
+            <div className="mt-2 p-3 rounded-xl bg-purple-50 border border-purple-200 text-purple-950 text-base font-semibold flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-purple-700 flex-shrink-0" />
+              <span><strong>Maneuver: </strong>{currentInstruction.maneuverNotice}</span>
             </div>
           )}
 
           {currentInstruction.hazardAlert && (
-            <div className="mt-2 text-xs text-amber-300 bg-amber-950/40 border border-amber-800/50 rounded-lg p-2.5">
-              <strong>Watch out: </strong>{currentInstruction.hazardAlert}
+            <div className="mt-2 p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-base font-semibold flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-amber-700 flex-shrink-0" />
+              <span><strong>Notice: </strong>{currentInstruction.hazardAlert}</span>
             </div>
           )}
         </div>
 
         {/* Audio Controls */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-2">
+          
           {/* Main playback buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full md:w-auto justify-center">
             <button
               onClick={handlePrev}
               disabled={currentStepIndex === 0}
-              className="p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
-              title="Previous instruction"
+              className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-800 font-bold disabled:opacity-30 disabled:cursor-not-allowed transition flex items-center gap-1.5"
             >
               <SkipBack className="w-5 h-5" />
+              <span>Previous</span>
             </button>
 
             <button
               onClick={handlePlayToggle}
-              className="p-4 rounded-full bg-pink-600 hover:bg-pink-500 text-white shadow-lg transition transform active:scale-95"
-              title={isPlaying ? 'Pause narration' : 'Play voice instruction'}
+              className="px-6 py-4 rounded-xl bg-rose-700 hover:bg-rose-800 text-white font-black text-lg shadow-md transition flex items-center gap-2 cursor-pointer"
             >
-              {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
+              {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+              <span>{isPlaying ? 'Pause Voice' : 'Play Voice'}</span>
             </button>
 
             <button
               onClick={handleNext}
               disabled={currentStepIndex >= selectedRoute.turnByTurn.length - 1}
-              className="p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
-              title="Next instruction"
+              className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-800 font-bold disabled:opacity-30 disabled:cursor-not-allowed transition flex items-center gap-1.5"
             >
+              <span>Next</span>
               <SkipForward className="w-5 h-5" />
             </button>
 
             <button
               onClick={handleRepeat}
-              className="p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
-              title="Replay current voice prompt"
+              className="p-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-800 font-bold transition"
+              title="Repeat instruction"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Settings & Auto advance */}
-          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
-            <label className="flex items-center gap-2 cursor-pointer bg-slate-800 px-3 py-2 rounded-lg border border-slate-700">
+          {/* Settings: Auto Advance & Speed */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-base text-slate-800">
+            <label className="flex items-center gap-2.5 cursor-pointer bg-slate-50 px-4 py-3 rounded-xl border-2 border-slate-300 font-bold">
               <input
                 type="checkbox"
                 checked={autoAdvance}
                 onChange={(e) => setAutoAdvance(e.target.checked)}
-                className="rounded border-slate-700 text-pink-600 focus:ring-pink-500"
+                className="w-5 h-5 rounded border-slate-400 text-rose-700 focus:ring-rose-600"
               />
               <span>Auto-advance (Simulate drive)</span>
             </label>
 
-            <div className="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-              <span>Speed:</span>
+            <div className="flex items-center gap-2 bg-slate-50 px-4 py-2.5 rounded-xl border-2 border-slate-300 font-bold">
+              <span className="text-slate-600 mr-1">Speed:</span>
               <button 
                 onClick={() => setSpeechRate(0.85)}
-                className={`px-1.5 py-0.5 rounded ${speechRate === 0.85 ? 'bg-pink-600 text-white' : 'text-slate-400'}`}
+                className={`px-2.5 py-1 rounded-lg ${speechRate === 0.85 ? 'bg-rose-700 text-white' : 'text-slate-700 hover:bg-slate-200'}`}
               >
-                0.8x
+                Slow (0.8x)
               </button>
               <button 
                 onClick={() => setSpeechRate(1.0)}
-                className={`px-1.5 py-0.5 rounded ${speechRate === 1.0 ? 'bg-pink-600 text-white' : 'text-slate-400'}`}
+                className={`px-2.5 py-1 rounded-lg ${speechRate === 1.0 ? 'bg-rose-700 text-white' : 'text-slate-700 hover:bg-slate-200'}`}
               >
-                1.0x
-              </button>
-              <button 
-                onClick={() => setSpeechRate(1.2)}
-                className={`px-1.5 py-0.5 rounded ${speechRate === 1.2 ? 'bg-pink-600 text-white' : 'text-slate-400'}`}
-              >
-                1.2x
+                Normal (1.0x)
               </button>
             </div>
           </div>
+
         </div>
 
-        {/* Step list navigator */}
-        <div className="pt-4 border-t border-slate-800">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">
-            Jump to specific instruction
+        {/* Step List Navigator */}
+        <div className="pt-4 border-t-2 border-slate-200">
+          <span className="text-sm font-black uppercase tracking-wider text-slate-700 block mb-3">
+            Jump to any step on this route:
           </span>
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2 max-h-40 overflow-y-auto p-1 scrollbar-thin">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1">
             {selectedRoute.turnByTurn.map((t, idx) => (
               <button
                 key={t.step}
@@ -317,10 +311,10 @@ export const ExaminerAudioPlayer: React.FC<ExaminerAudioPlayerProps> = ({ initia
                   setCurrentStepIndex(idx);
                   if (isPlaying) speakText(t.spokenAudioText);
                 }}
-                className={`p-2 rounded-lg text-left text-xs transition truncate border ${
+                className={`p-3 rounded-xl text-left text-sm font-bold transition truncate border-2 ${
                   currentStepIndex === idx
-                    ? 'bg-pink-600 text-white border-pink-500 font-bold'
-                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                    ? 'bg-rose-700 text-white border-rose-800 shadow'
+                    : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                 }`}
               >
                 <div className="truncate">#{t.step}: {t.streetName}</div>

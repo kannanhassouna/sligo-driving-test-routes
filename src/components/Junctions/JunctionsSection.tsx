@@ -1,115 +1,113 @@
 import React from 'react';
 import { SLIGO_TRICKY_JUNCTIONS } from '../../data/sligoRoutes';
 import { 
-  AlertTriangle, Navigation, ExternalLink, MapPin, 
+  AlertTriangle, Navigation, MapPin, 
   ArrowRightCircle, ShieldAlert 
 } from 'lucide-react';
 
-export const JunctionsSection: React.FC = () => {
-  const getDifficultyColor = (diff: string) => {
-    switch (diff) {
-      case 'Critical':
-        return 'bg-red-950/80 text-red-300 border-red-700/60';
-      case 'High':
-        return 'bg-amber-950/80 text-amber-300 border-amber-700/60';
-      default:
-        return 'bg-blue-950/80 text-blue-300 border-blue-700/60';
-    }
-  };
+interface JunctionsSectionProps {
+  isLargeText?: boolean;
+}
 
+export const JunctionsSection: React.FC<JunctionsSectionProps> = ({ isLargeText }) => {
   return (
     <section className="space-y-6">
       {/* Intro header */}
-      <div className="bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-500/30 rounded-2xl p-6 shadow-xl">
-        <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
-          <AlertTriangle className="w-4 h-4" />
-          Sligo Road Hazards & Complex Junctions
+      <div className="bg-white border-3 border-amber-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <div className="flex items-center gap-2 text-amber-800 text-sm font-black uppercase tracking-wider mb-2">
+          <AlertTriangle className="w-5 h-5 text-amber-600" />
+          <span>Sligo Road Hazards & Complex Junctions</span>
         </div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">
-          How to Navigate Sligo’s Hardest Roundabouts & Turns
+        <h2 className={`font-black text-slate-900 tracking-tight leading-tight mb-2 ${isLargeText ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'}`}>
+          Sligo Roundabouts & Tricky Junctions
         </h2>
-        <p className="text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
-          Sligo is known for multi-lane roundabouts, fast N4 slip road mergers, and blind urban junctions. 
-          Mastering lane selection and mirror-signal-maneuver timing at these 5 critical hotspots will dramatically raise your pass probability.
+        <p className={`text-slate-700 leading-relaxed max-w-3xl ${isLargeText ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
+          Sligo has multiple busy multi-lane roundabouts, fast N4 dual carriageway slip roads, and tight blind junctions. 
+          Knowing which lane to pick before you enter makes the driving test much easier and prevents sudden lane-change faults.
         </p>
       </div>
 
       {/* Junction Cards */}
-      <div className="space-y-5">
+      <div className="space-y-6">
         {SLIGO_TRICKY_JUNCTIONS.map((j) => (
-          <div 
+          <article 
             key={j.id}
-            className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 sm:p-6 shadow-xl transition"
+            className="bg-white border-3 border-slate-300 hover:border-amber-500 rounded-2xl p-6 sm:p-8 shadow-sm transition"
           >
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className={`px-2 py-0.5 rounded text-xs font-bold border ${getDifficultyColor(j.difficulty)}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`px-3 py-1 rounded-lg text-sm font-black uppercase tracking-wide border ${
+                    j.difficulty === 'Critical'
+                      ? 'bg-red-100 text-red-800 border-red-300'
+                      : 'bg-amber-100 text-amber-900 border-amber-300'
+                  }`}>
                     {j.difficulty} Risk
                   </span>
-                  <span className="text-xs text-slate-400 flex items-center gap-1 font-mono">
-                    <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-sm font-bold text-slate-600 flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-amber-600" />
                     {j.locationName}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-white tracking-tight">{j.name}</h3>
+                <h3 className={`font-black text-slate-900 tracking-tight leading-snug ${isLargeText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
+                  {j.name}
+                </h3>
               </div>
 
               {/* Navigation CTAs */}
-              <div className="flex items-center gap-2 self-start">
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
                 <a
                   href={j.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow transition"
+                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-green-700 hover:bg-green-800 text-white text-sm sm:text-base font-bold shadow transition"
                 >
-                  <Navigation className="w-3.5 h-3.5" />
+                  <Navigation className="w-4 h-4" />
                   Google Maps
-                  <ExternalLink className="w-3 h-3 text-blue-200" />
                 </a>
 
                 <a
                   href={j.appleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition"
+                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm sm:text-base font-bold transition"
                 >
-                  <Navigation className="w-3.5 h-3.5 text-emerald-400" />
+                  <Navigation className="w-4 h-4 text-emerald-400" />
                   Apple Maps
-                  <ExternalLink className="w-3 h-3 text-slate-400" />
                 </a>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+            {/* Plain explanation */}
+            <p className={`text-slate-800 leading-relaxed mb-4 ${isLargeText ? 'text-lg' : 'text-base'}`}>
               {j.summary}
             </p>
 
             {/* Recommended Lane Guidance */}
-            <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 mb-3">
-              <div className="flex items-center gap-2 text-blue-400 font-semibold text-xs mb-1">
-                <ArrowRightCircle className="w-4 h-4" />
-                Recommended Lane & Signaling Rule:
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 sm:p-5 mb-4">
+              <div className="flex items-center gap-2 text-blue-900 font-black text-sm sm:text-base mb-1.5">
+                <ArrowRightCircle className="w-5 h-5 text-blue-700" />
+                Correct Lane & Indicator Rules:
               </div>
-              <p className="text-xs sm:text-sm text-blue-200/90 leading-relaxed font-mono">
+              <p className={`text-blue-950 font-bold leading-relaxed ${isLargeText ? 'text-base sm:text-lg' : 'text-sm sm:text-base'}`}>
                 {j.recommendedLane}
               </p>
             </div>
 
             {/* Examiner Watchpoints */}
-            <div className="bg-amber-950/30 border border-amber-900/40 rounded-xl p-3.5">
-              <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs mb-1.5">
-                <ShieldAlert className="w-4 h-4" />
-                Examiner Watchpoints (Avoid Instant Grade 2/3 Faults):
+            <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 sm:p-5">
+              <div className="flex items-center gap-2 text-amber-900 font-black text-sm sm:text-base mb-2">
+                <ShieldAlert className="w-5 h-5 text-amber-700" />
+                What examiners watch for (Avoid test marks):
               </div>
-              <ul className="space-y-1 text-xs text-amber-200/90 list-disc list-inside">
+              <ul className={`space-y-1.5 text-amber-950 list-disc list-inside ${isLargeText ? 'text-base' : 'text-sm sm:text-base'}`}>
                 {j.examinerWatchpoints.map((pt, idx) => (
-                  <li key={idx}>{pt}</li>
+                  <li key={idx} className="font-medium">{pt}</li>
                 ))}
               </ul>
             </div>
 
-          </div>
+          </article>
         ))}
       </div>
     </section>

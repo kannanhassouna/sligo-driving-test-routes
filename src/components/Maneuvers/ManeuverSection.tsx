@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { SLIGO_MANEUVER_SPOTS } from '../../data/sligoRoutes';
-import { 
-  Navigation, ExternalLink, ShieldCheck, AlertOctagon, CheckCircle2, 
-  MapPin, ChevronDown, ChevronUp, RotateCcw, Mountain, Car 
-} from 'lucide-react';
+import { Navigation, MapPin, CheckCircle2, AlertOctagon, ChevronDown, ChevronUp } from 'lucide-react';
 
-export const ManeuverSection: React.FC = () => {
+interface ManeuverSectionProps {
+  isLargeText?: boolean;
+}
+
+export const ManeuverSection: React.FC<ManeuverSectionProps> = ({ isLargeText }) => {
   const [filter, setFilter] = useState<'all' | 'reverse_corner' | 'turnabout' | 'hill_start'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -14,147 +15,122 @@ export const ManeuverSection: React.FC = () => {
     return s.type === filter;
   });
 
-  const getManeuverIcon = (type: string) => {
-    switch (type) {
-      case 'reverse_corner':
-        return <RotateCcw className="w-4 h-4 text-purple-400" />;
-      case 'hill_start':
-        return <Mountain className="w-4 h-4 text-amber-400" />;
-      case 'turnabout':
-        return <Car className="w-4 h-4 text-blue-400" />;
-      default:
-        return <ShieldCheck className="w-4 h-4 text-emerald-400" />;
-    }
-  };
-
   return (
     <section className="space-y-6">
-      {/* Introduction banner */}
-      <div className="bg-gradient-to-r from-purple-950/60 via-slate-900 to-slate-900 border border-purple-500/30 rounded-2xl p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider mb-1">
-              <ShieldCheck className="w-4 h-4" />
-              Sligo RSA Test Maneuvers Hotspots
-            </div>
-            <h2 className="text-2xl font-bold text-white tracking-tight">
-              Direct Navigation to Sligo Maneuver Practice Locations
-            </h2>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
-              In Sligo, examiners take candidates to specific housing estates and hills for the required maneuvers. 
-              Tap any spot below to navigate directly there in <strong>Google Maps</strong> or <strong>Apple Maps</strong> to practice!
-            </p>
-          </div>
+      {/* Intro Header */}
+      <div className="bg-white border-3 border-purple-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <h2 className={`font-black text-slate-900 tracking-tight mb-2 ${isLargeText ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'}`}>
+          Sligo Driving Maneuver Practice Locations
+        </h2>
+        <p className={`text-slate-700 leading-relaxed max-w-3xl mb-4 ${isLargeText ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
+          In the Sligo driving test, examiners will ask you to perform a <strong>Hill Start</strong>, a <strong>Reverse Around a Corner</strong>, and a <strong>Turnabout (3-point turn)</strong>.
+          Choose any location below to get instant driving directions straight there in Google Maps or Apple Maps.
+        </p>
 
-          {/* Filter Pills */}
-          <div className="flex flex-wrap gap-1.5 self-start md:self-center">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                filter === 'all'
-                  ? 'bg-purple-600 text-white shadow'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              All Spots ({SLIGO_MANEUVER_SPOTS.length})
-            </button>
-            <button
-              onClick={() => setFilter('reverse_corner')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                filter === 'reverse_corner'
-                  ? 'bg-purple-600 text-white shadow'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              Reverse Corner
-            </button>
-            <button
-              onClick={() => setFilter('hill_start')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                filter === 'hill_start'
-                  ? 'bg-purple-600 text-white shadow'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              Hill Starts
-            </button>
-            <button
-              onClick={() => setFilter('turnabout')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                filter === 'turnabout'
-                  ? 'bg-purple-600 text-white shadow'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              Turnabouts (3-Point)
-            </button>
-          </div>
+        {/* Big Simple Filter Buttons */}
+        <div className="flex flex-wrap gap-2 pt-2">
+          <button
+            onClick={() => setFilter('all')}
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
+              filter === 'all'
+                ? 'bg-purple-700 text-white border-purple-800 shadow'
+                : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+            }`}
+          >
+            Show All Spots ({SLIGO_MANEUVER_SPOTS.length})
+          </button>
+          <button
+            onClick={() => setFilter('reverse_corner')}
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
+              filter === 'reverse_corner'
+                ? 'bg-purple-700 text-white border-purple-800 shadow'
+                : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+            }`}
+          >
+            Reverse Corner
+          </button>
+          <button
+            onClick={() => setFilter('hill_start')}
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
+              filter === 'hill_start'
+                ? 'bg-purple-700 text-white border-purple-800 shadow'
+                : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+            }`}
+          >
+            Hill Starts
+          </button>
+          <button
+            onClick={() => setFilter('turnabout')}
+            className={`px-4 py-2.5 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
+              filter === 'turnabout'
+                ? 'bg-purple-700 text-white border-purple-800 shadow'
+                : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+            }`}
+          >
+            Turnabouts (3-Point)
+          </button>
         </div>
       </div>
 
-      {/* Maneuver Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Maneuvers Cards List */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredSpots.map((spot) => {
           const isExpanded = expandedId === spot.id;
 
           return (
-            <div 
-              key={spot.id}
-              className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 shadow-xl transition flex flex-col justify-between"
+            <article 
+              key={spot.id} 
+              className="bg-white border-3 border-slate-300 hover:border-purple-600 rounded-2xl p-6 sm:p-8 shadow-sm transition flex flex-col justify-between"
             >
               <div>
-                {/* Header */}
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-950/80 border border-purple-500/40 flex items-center justify-center flex-shrink-0">
-                      {getManeuverIcon(spot.type)}
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-white tracking-tight">{spot.title}</h3>
-                      <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                        <MapPin className="w-3 h-3 text-purple-400" />
-                        {spot.locationName}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {/* Title */}
+                <h3 className={`font-black text-slate-900 tracking-tight mb-1 ${isLargeText ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
+                  {spot.title}
+                </h3>
+                
+                {/* Location text */}
+                <p className="text-sm sm:text-base font-bold text-purple-800 flex items-center gap-1.5 mb-3">
+                  <MapPin className="w-4 h-4 flex-shrink-0 text-purple-700" />
+                  <span>{spot.locationName}</span>
+                </p>
 
-                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                {/* Description */}
+                <p className={`text-slate-700 leading-relaxed mb-4 ${isLargeText ? 'text-lg' : 'text-base'}`}>
                   {spot.description}
                 </p>
 
-                {/* Collapsible details for Examiner Tips & Common Faults */}
-                <div className="mt-3">
+                {/* Collapsible Advice */}
+                <div className="border-t border-slate-200 pt-3">
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : spot.id)}
-                    className="flex items-center gap-1.5 text-xs text-purple-400 hover:text-purple-300 font-medium py-1 transition"
+                    className="flex items-center justify-between w-full text-left py-2 font-bold text-purple-800 hover:text-purple-900 text-sm sm:text-base transition"
                   >
-                    <span>{isExpanded ? 'Hide Examiner Tips & Faults' : 'View Sligo Examiner Tips & Fail Traps'}</span>
-                    {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    <span>{isExpanded ? 'Hide Driving Advice' : 'Show Driving Advice & Common Mistakes'}</span>
+                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                   </button>
 
                   {isExpanded && (
-                    <div className="mt-3 space-y-3 pt-3 border-t border-slate-800 text-xs animate-fadeIn">
-                      {/* Examiner Tips */}
-                      <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                        <div className="flex items-center gap-1.5 font-semibold text-emerald-400 mb-2">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          How to Ace It (RSA Technique)
+                    <div className="mt-3 space-y-4 pt-2 border-t border-slate-200 animate-fadeIn">
+                      {/* What to do */}
+                      <div className="p-4 rounded-xl bg-green-50 border border-green-300">
+                        <div className="font-black text-green-900 flex items-center gap-2 mb-2 text-base">
+                          <CheckCircle2 className="w-5 h-5 text-green-700" />
+                          How to pass this maneuver:
                         </div>
-                        <ul className="space-y-1.5 text-slate-300 list-disc list-inside">
+                        <ul className="space-y-2 text-green-950 list-disc list-inside text-sm sm:text-base">
                           {spot.examinerTips.map((tip, i) => (
                             <li key={i}>{tip}</li>
                           ))}
                         </ul>
                       </div>
 
-                      {/* Common Faults */}
-                      <div className="bg-red-950/30 p-3 rounded-xl border border-red-900/40">
-                        <div className="flex items-center gap-1.5 font-semibold text-red-400 mb-2">
-                          <AlertOctagon className="w-3.5 h-3.5" />
-                          Common Sligo Grade 2 & 3 Failures
+                      {/* Common mistakes */}
+                      <div className="p-4 rounded-xl bg-red-50 border border-red-300">
+                        <div className="font-black text-red-900 flex items-center gap-2 mb-2 text-base">
+                          <AlertOctagon className="w-5 h-5 text-red-700" />
+                          Mistakes that cause a test fail:
                         </div>
-                        <ul className="space-y-1.5 text-red-200/90 list-disc list-inside">
+                        <ul className="space-y-2 text-red-950 list-disc list-inside text-sm sm:text-base">
                           {spot.commonFaults.map((fault, i) => (
                             <li key={i}>{fault}</li>
                           ))}
@@ -165,31 +141,29 @@ export const ManeuverSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Navigation CTAs */}
-              <div className="mt-5 pt-4 border-t border-slate-800 grid grid-cols-2 gap-2">
+              {/* Big Direct Navigation Buttons */}
+              <div className="mt-6 pt-4 border-t-2 border-slate-200 space-y-2">
                 <a
                   href={spot.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow transition"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-green-700 hover:bg-green-800 text-white font-bold text-sm sm:text-base shadow transition text-center"
                 >
-                  <Navigation className="w-3.5 h-3.5" />
-                  Google Maps
-                  <ExternalLink className="w-3 h-3 text-blue-200" />
+                  <Navigation className="w-5 h-5" />
+                  <span>Drive here in Google Maps</span>
                 </a>
 
                 <a
                   href={spot.appleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm sm:text-base transition text-center"
                 >
-                  <Navigation className="w-3.5 h-3.5 text-emerald-400" />
-                  Apple Maps
-                  <ExternalLink className="w-3 h-3 text-slate-400" />
+                  <Navigation className="w-5 h-5 text-emerald-400" />
+                  <span>Drive here in Apple Maps</span>
                 </a>
               </div>
-            </div>
+            </article>
           );
         })}
       </div>

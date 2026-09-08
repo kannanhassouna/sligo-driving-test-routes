@@ -1,115 +1,132 @@
 import React from 'react';
-import { Compass, MapPin, Navigation, Car, AlertTriangle, BookOpen, Volume2, ExternalLink } from 'lucide-react';
+import { MapPin, Navigation, Car, AlertTriangle, BookOpen, Volume2, ZoomIn, ZoomOut } from 'lucide-react';
 import { SLIGO_TEST_CENTRE } from '../../data/sligoRoutes';
 
 interface NavbarProps {
   activeTab: 'routes' | 'maneuvers' | 'junctions' | 'prep' | 'audio';
   setActiveTab: (tab: 'routes' | 'maneuvers' | 'junctions' | 'prep' | 'audio') => void;
-  selectedRouteCount: number;
+  isLargeText: boolean;
+  setIsLargeText: (val: boolean) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, selectedRouteCount }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  activeTab, 
+  setActiveTab, 
+  isLargeText, 
+  setIsLargeText 
+}) => {
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo & Sligo Test Centre Badge */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('routes')}>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xl shadow-inner">
-              <span className="text-red-500 font-black text-2xl">L</span>
+    <header className="bg-white border-b-2 border-slate-300 sticky top-0 z-50 shadow-sm">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+        
+        {/* Top Header Row */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          
+          {/* Logo & Main Title */}
+          <div 
+            onClick={() => setActiveTab('routes')}
+            className="flex items-center gap-4 cursor-pointer"
+          >
+            <div className="w-14 h-14 bg-white border-4 border-red-600 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+              <span className="text-red-600 font-black text-4xl select-none">L</span>
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-bold tracking-tight text-white">Sligo Driving Test Routes</h1>
-                <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-950 text-emerald-300 border border-emerald-700/50">
-                  RSA Carraroe
-                </span>
-              </div>
-              <p className="text-xs text-slate-400 flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-emerald-400" />
-                Seamus McDaniel Motorcycles, Cuilbeg &bull; <span className="font-mono text-emerald-400">{SLIGO_TEST_CENTRE.eircode}</span>
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                Sligo Driving Test Routes
+              </h1>
+              <p className="text-sm sm:text-base font-medium text-slate-600 flex items-center gap-1.5 mt-0.5">
+                <MapPin className="w-4 h-4 text-red-600 flex-shrink-0" />
+                <span>Starts at: <strong>Seamus McDaniel Motorcycles</strong>, Cuilbeg, Carraroe (F91 N267)</span>
               </p>
             </div>
           </div>
 
-          {/* Quick External Launch directly to Test Centre */}
-          <div className="hidden md:flex items-center gap-2">
+          {/* Quick Buttons: Text Zoom & Direct Directions */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsLargeText(!isLargeText)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm sm:text-base transition cursor-pointer"
+              title="Toggle bigger text for easier reading"
+            >
+              {isLargeText ? <ZoomOut className="w-5 h-5 text-blue-600" /> : <ZoomIn className="w-5 h-5 text-blue-600" />}
+              <span>{isLargeText ? 'Standard Text' : 'Bigger Text (A+)'}</span>
+            </button>
+
             <a
               href={SLIGO_TEST_CENTRE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
-              title="Open Sligo RSA Test Centre in Google Maps"
+              className="hidden md:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm sm:text-base shadow transition"
             >
-              <Navigation className="w-3.5 h-3.5 text-blue-400" />
-              Test Centre on Google Maps
-              <ExternalLink className="w-3 h-3 text-slate-400" />
+              <Navigation className="w-5 h-5" />
+              Directions to Test Centre
             </a>
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <nav className="flex space-x-1 sm:space-x-4 overflow-x-auto pb-2 scrollbar-none pt-1">
+        {/* Big Simple Navigation Tabs */}
+        <nav className="mt-4 pt-3 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-5 gap-2">
           <button
             onClick={() => setActiveTab('routes')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
+            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
               activeTab === 'routes'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                ? 'bg-blue-700 text-white border-blue-800 shadow'
+                : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <Car className="w-4 h-4" />
-            Test Routes ({selectedRouteCount})
+            <Car className="w-5 h-5 flex-shrink-0" />
+            <span>1. Test Routes</span>
           </button>
 
           <button
             onClick={() => setActiveTab('maneuvers')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
+            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
               activeTab === 'maneuvers'
-                ? 'bg-purple-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                ? 'bg-purple-700 text-white border-purple-800 shadow'
+                : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <Compass className="w-4 h-4" />
-            Maneuver Spots (Crozon, Caltragh...)
+            <span className="text-xl">🔄</span>
+            <span>2. Maneuvers</span>
           </button>
 
           <button
             onClick={() => setActiveTab('junctions')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
+            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
               activeTab === 'junctions'
-                ? 'bg-amber-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                ? 'bg-amber-600 text-white border-amber-700 shadow'
+                : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <AlertTriangle className="w-4 h-4" />
-            Tricky Junctions & Roundabouts
+            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+            <span>3. Roundabouts</span>
           </button>
 
           <button
             onClick={() => setActiveTab('prep')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
+            className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
               activeTab === 'prep'
-                ? 'bg-emerald-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                ? 'bg-emerald-700 text-white border-emerald-800 shadow'
+                : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <BookOpen className="w-4 h-4" />
-            RSA Prep & Under the Bonnet
+            <BookOpen className="w-5 h-5 flex-shrink-0" />
+            <span>4. Under Bonnet</span>
           </button>
 
           <button
             onClick={() => setActiveTab('audio')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
+            className={`col-span-2 sm:col-span-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-bold text-sm sm:text-base border-2 transition ${
               activeTab === 'audio'
-                ? 'bg-pink-600 text-white shadow'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                ? 'bg-rose-700 text-white border-rose-800 shadow'
+                : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <Volume2 className="w-4 h-4" />
-            Audio Examiner Mode
+            <Volume2 className="w-5 h-5 flex-shrink-0" />
+            <span>5. Read Aloud</span>
           </button>
         </nav>
+
       </div>
     </header>
   );
