@@ -1,10 +1,10 @@
 import React from 'react';
-import { Navigation, Car, AlertTriangle, BookOpen, HelpCircle } from 'lucide-react';
+import { Navigation, Car, AlertTriangle, BookOpen } from 'lucide-react';
 import { SLIGO_TEST_CENTRE } from '../../data/sligoRoutes';
 
 interface NavbarProps {
-  activeTab: 'routes' | 'maneuvers' | 'junctions' | 'theory' | 'prep';
-  setActiveTab: (tab: 'routes' | 'maneuvers' | 'junctions' | 'theory' | 'prep') => void;
+  activeTab: 'routes' | 'maneuvers' | 'junctions' | 'prep';
+  setActiveTab: (tab: 'routes' | 'maneuvers' | 'junctions' | 'prep') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
@@ -85,18 +85,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <AlertTriangle className="w-4 h-4" />
             <span>Roundabouts</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('theory')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition ${
-              activeTab === 'theory'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-            }`}
-          >
-            <HelpCircle className="w-4 h-4" />
-            <span>Theory & Signs</span>
           </button>
 
           <button

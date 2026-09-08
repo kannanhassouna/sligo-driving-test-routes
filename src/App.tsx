@@ -6,17 +6,16 @@ import { RouteCard } from './components/Routes/RouteCard';
 import { RouteDetailPage } from './components/Routes/RouteDetailPage';
 import { ManeuverSection } from './components/Maneuvers/ManeuverSection';
 import { JunctionsSection } from './components/Junctions/JunctionsSection';
-import { TheorySection } from './components/Theory/TheorySection';
 import { RsaSection } from './components/RSA/RsaSection';
 import { MapPin, Search, Navigation } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'routes' | 'maneuvers' | 'junctions' | 'theory' | 'prep'>('routes');
+  const [activeTab, setActiveTab] = useState<'routes' | 'maneuvers' | 'junctions' | 'prep'>('routes');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedManeuverFilter, setSelectedManeuverFilter] = useState<string>('all');
   const [selectedRoute, setSelectedRoute] = useState<TestRoute | null>(null);
 
-  // Sync route selection and tabs with URL hash (#route-1, #theory, etc.)
+  // Sync route selection and tabs with URL hash (#route-1, #route-2, etc.)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
@@ -29,11 +28,6 @@ export function App() {
           setActiveTab('routes');
           return;
         }
-      }
-      if (hash === '#theory') {
-        setActiveTab('theory');
-        setSelectedRoute(null);
-        return;
       }
       if (!hash || hash === '#routes') {
         setSelectedRoute(null);
@@ -56,11 +50,11 @@ export function App() {
     window.location.hash = '';
   };
 
-  const handleTabChange = (tab: 'routes' | 'maneuvers' | 'junctions' | 'theory' | 'prep') => {
+  const handleTabChange = (tab: 'routes' | 'maneuvers' | 'junctions' | 'prep') => {
     setActiveTab(tab);
     if (tab !== 'routes') {
       setSelectedRoute(null);
-      window.location.hash = tab === 'theory' ? '#theory' : '';
+      window.location.hash = '';
     }
   };
 
@@ -217,10 +211,7 @@ export function App() {
         {/* Tab 3: Tricky Junctions */}
         {activeTab === 'junctions' && <JunctionsSection />}
 
-        {/* Tab 4: Theory & Road Signs */}
-        {activeTab === 'theory' && <TheorySection />}
-
-        {/* Tab 5: RSA Test Prep & Questions */}
+        {/* Tab 4: RSA Test Prep & Questions */}
         {activeTab === 'prep' && <RsaSection />}
 
       </main>
