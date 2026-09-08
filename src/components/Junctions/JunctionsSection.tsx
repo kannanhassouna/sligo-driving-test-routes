@@ -46,7 +46,7 @@ export const JunctionsSection: React.FC = () => {
                 </h3>
               </div>
 
-              {/* Navigation CTAs */}
+              {/* Navigation CTA */}
               <div className="flex items-center gap-2 self-start sm:self-auto">
                 <a
                   href={j.googleMapsUrl}
@@ -56,16 +56,6 @@ export const JunctionsSection: React.FC = () => {
                 >
                   <Navigation className="w-3.5 h-3.5" />
                   Google Maps
-                </a>
-
-                <a
-                  href={j.appleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition"
-                >
-                  <Navigation className="w-3.5 h-3.5 text-emerald-400" />
-                  Apple Maps
                 </a>
               </div>
             </div>

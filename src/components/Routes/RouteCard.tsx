@@ -69,26 +69,16 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route, onPlayAudio }) => {
 
       {/* Action Row */}
       <div className="pt-3 border-t border-slate-100 space-y-2">
-        {/* Navigation Buttons */}
-        <div className="grid grid-cols-2 gap-2">
+        {/* Navigation Button */}
+        <div>
           <a
             href={route.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition"
           >
             <Navigation className="w-4 h-4" />
-            <span>Google Maps</span>
-          </a>
-
-          <a
-            href={route.appleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm shadow-xs transition"
-          >
-            <Navigation className="w-4 h-4 text-emerald-400" />
-            <span>Apple Maps</span>
+            <span>Open in Google Maps</span>
           </a>
         </div>
 

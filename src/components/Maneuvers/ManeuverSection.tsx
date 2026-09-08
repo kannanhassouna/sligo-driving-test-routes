@@ -138,26 +138,16 @@ export const ManeuverSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Navigation Buttons */}
-              <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
+              {/* Navigation Button */}
+              <div className="mt-4 pt-3 border-t border-slate-100">
                 <a
                   href={spot.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition"
+                  className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition"
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  <span>Google Maps</span>
-                </a>
-
-                <a
-                  href={spot.appleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs transition"
-                >
-                  <Navigation className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Apple Maps</span>
+                  <span>Open in Google Maps</span>
                 </a>
               </div>
             </div>
