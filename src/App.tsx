@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import { SLIGO_TEST_ROUTES, SLIGO_TEST_CENTRE } from './data/sligoRoutes';
-import type { TestRoute } from './types/route';
 import { Navbar } from './components/Common/Navbar';
 import { RouteCard } from './components/Routes/RouteCard';
 import { ManeuverSection } from './components/Maneuvers/ManeuverSection';
 import { JunctionsSection } from './components/Junctions/JunctionsSection';
 import { RsaSection } from './components/RSA/RsaSection';
-import { ExaminerAudioPlayer } from './components/Audio/ExaminerAudioPlayer';
 import { MapPin, Search, Navigation } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'routes' | 'maneuvers' | 'junctions' | 'prep' | 'audio'>('routes');
+  const [activeTab, setActiveTab] = useState<'routes' | 'maneuvers' | 'junctions' | 'prep'>('routes');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedManeuverFilter, setSelectedManeuverFilter] = useState<string>('all');
-  const [audioTargetRoute, setAudioTargetRoute] = useState<TestRoute | undefined>(undefined);
 
   // Filter routes based on search and maneuver filter
   const filteredRoutes = SLIGO_TEST_ROUTES.filter((route) => {
@@ -28,11 +25,6 @@ export function App() {
 
     return matchesSearch && matchesManeuver;
   });
-
-  const handlePlayAudioFromCard = (route: TestRoute) => {
-    setAudioTargetRoute(route);
-    setActiveTab('audio');
-  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased">
@@ -150,7 +142,6 @@ export function App() {
                   <RouteCard
                     key={route.id}
                     route={route}
-                    onPlayAudio={handlePlayAudioFromCard}
                   />
                 ))}
               </div>
@@ -166,13 +157,6 @@ export function App() {
 
         {/* Tab 4: RSA Test Prep & Questions */}
         {activeTab === 'prep' && <RsaSection />}
-
-        {/* Tab 5: Audio Examiner Player */}
-        {activeTab === 'audio' && (
-          <ExaminerAudioPlayer 
-            initialRoute={audioTargetRoute} 
-          />
-        )}
 
       </main>
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Navigation, Car, AlertTriangle, BookOpen, Volume2 } from 'lucide-react';
+import { Navigation, Car, AlertTriangle, BookOpen } from 'lucide-react';
 import { SLIGO_TEST_CENTRE } from '../../data/sligoRoutes';
 
 interface NavbarProps {
-  activeTab: 'routes' | 'maneuvers' | 'junctions' | 'prep' | 'audio';
-  setActiveTab: (tab: 'routes' | 'maneuvers' | 'junctions' | 'prep' | 'audio') => void;
+  activeTab: 'routes' | 'maneuvers' | 'junctions' | 'prep';
+  setActiveTab: (tab: 'routes' | 'maneuvers' | 'junctions' | 'prep') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
@@ -97,18 +97,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <BookOpen className="w-4 h-4" />
             <span>Under Bonnet & Checklist</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('audio')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition ${
-              activeTab === 'audio'
-                ? 'bg-rose-600 text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-            }`}
-          >
-            <Volume2 className="w-4 h-4" />
-            <span>Examiner Voice</span>
           </button>
         </nav>
 

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import type { TestRoute } from '../../types/route';
-import { Navigation, Clock, Route as RouteIcon, ChevronDown, ChevronUp, Volume2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Navigation, Clock, Route as RouteIcon, ChevronDown, ChevronUp, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface RouteCardProps {
   route: TestRoute;
-  onPlayAudio: (route: TestRoute) => void;
 }
 
-export const RouteCard: React.FC<RouteCardProps> = ({ route, onPlayAudio }) => {
+export const RouteCard: React.FC<RouteCardProps> = ({ route }) => {
   const [showSteps, setShowSteps] = useState(false);
 
   return (
@@ -82,22 +81,14 @@ export const RouteCard: React.FC<RouteCardProps> = ({ route, onPlayAudio }) => {
           </a>
         </div>
 
-        {/* Secondary: Steps Toggle & Voice */}
-        <div className="flex items-center justify-between gap-2 pt-1">
+        {/* Steps Toggle */}
+        <div className="pt-0.5">
           <button
             onClick={() => setShowSteps(!showSteps)}
-            className="flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-blue-600 transition cursor-pointer py-1"
+            className="w-full flex items-center justify-center gap-1 py-1.5 text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition cursor-pointer"
           >
-            <span>{showSteps ? 'Hide steps' : `View ${route.turnByTurn.length} steps`}</span>
+            <span>{showSteps ? 'Hide turn-by-turn steps' : `View ${route.turnByTurn.length} turn-by-turn steps`}</span>
             {showSteps ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-          </button>
-
-          <button
-            onClick={() => onPlayAudio(route)}
-            className="flex items-center gap-1 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2 py-1 rounded-lg transition cursor-pointer"
-          >
-            <Volume2 className="w-3.5 h-3.5" />
-            <span>Practice with voice</span>
           </button>
         </div>
 
